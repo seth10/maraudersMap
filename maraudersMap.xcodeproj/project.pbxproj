@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6C6A35891BA4B9E30046659B /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6A35881BA4B9E30046659B /* SwiftyJSON.swift */; };
+		6C6A358D1BA4BD080046659B /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C6A358C1BA4BD080046659B /* DataManager.swift */; };
 		B2B29A6E1BA4A9630023B0EB /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B29A6D1BA4A9630023B0EB /* AppModel.swift */; };
 		B2CEF5391BA40BE60056FB22 /* Mapkins Logo.png in Resources */ = {isa = PBXBuildFile; fileRef = B2CEF5381BA40BE60056FB22 /* Mapkins Logo.png */; };
 		B2F46A341BA3D037008AD962 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F46A331BA3D037008AD962 /* AppDelegate.swift */; };
@@ -29,6 +31,8 @@
 
 /* Begin PBXFileReference section */
 		6C0741711BA4B43500545618 /* MM-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MM-Bridging-Header.h"; sourceTree = "<group>"; };
+		6C6A35881BA4B9E30046659B /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
+		6C6A358C1BA4BD080046659B /* DataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		B2B29A6D1BA4A9630023B0EB /* AppModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppModel.swift; path = "../../TopApps-Starter/TopApps/AppModel.swift"; sourceTree = "<group>"; };
 		B2CEF5381BA40BE60056FB22 /* Mapkins Logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Mapkins Logo.png"; path = "../../Mapkins Logo.png"; sourceTree = "<group>"; };
 		B2F46A2E1BA3D037008AD962 /* maraudersMap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = maraudersMap.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -65,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				6C0741711BA4B43500545618 /* MM-Bridging-Header.h */,
+				6C6A35881BA4B9E30046659B /* SwiftyJSON.swift */,
 				B2F46A301BA3D037008AD962 /* maraudersMap */,
 				B2F46A461BA3D037008AD962 /* maraudersMapTests */,
 				B2F46A2F1BA3D037008AD962 /* Products */,
@@ -88,6 +93,7 @@
 				B2F46A351BA3D037008AD962 /* ViewController.swift */,
 				B2F46A371BA3D037008AD962 /* Main.storyboard */,
 				B2F46A3A1BA3D037008AD962 /* Images.xcassets */,
+				6C6A358C1BA4BD080046659B /* DataManager.swift */,
 				B2F46A3C1BA3D037008AD962 /* LaunchScreen.xib */,
 				B2F46A311BA3D037008AD962 /* Supporting Files */,
 			);
@@ -222,8 +228,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2F46A361BA3D037008AD962 /* ViewController.swift in Sources */,
+				6C6A358D1BA4BD080046659B /* DataManager.swift in Sources */,
 				B2B29A6E1BA4A9630023B0EB /* AppModel.swift in Sources */,
 				B2F46A341BA3D037008AD962 /* AppDelegate.swift in Sources */,
+				6C6A35891BA4B9E30046659B /* SwiftyJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -59,7 +59,23 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
     //Gets us our location
     
     
-    
+    func getFootsteps()
+    {
+        println("start getFootsteps")
+        DataManager.getFootsteps { (footsteps) -> Void in
+            let json = JSON(data: footsteps)
+            let footsteps = json.array!
+            //println(footsteps)
+            for footstep in footsteps {
+                let ip = footstep["ip"].number!
+                let lat = footstep["lat"].number!
+                let long = footstep["long"].number!
+                let time = footstep["time"].number!
+                println("ip=\(ip)&time=\(time)&lat=\(lat)&long=\(long)")
+            }
+        }
+        println("end getFootsteps")
+    }
     
     
     func displayLocationInfo(placemark: CLPlacemark)
@@ -135,9 +151,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
             println("responseString = \(responseString)")
+            
+            self.getFootsteps()
         }
         task.resume()
-        
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
