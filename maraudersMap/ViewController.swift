@@ -13,19 +13,15 @@ import MapKit
 
 class ViewController: UIViewController, CLLocationManagerDelegate {
     
-    
     let locationManager = CLLocationManager()
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         
         self.locationManager.delegate = self
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
-        
         
     }
 
@@ -33,14 +29,10 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    
-    
+
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: { (placemarks, error) -> Void in
-            
             if error != nil
             {
                 println("Error: " + error.localizedDescription)
@@ -52,28 +44,21 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 let pm = placemarks[0] as! CLPlacemark
                 self.sendFootstep(pm)
             }
-            
         })
-        
     }
     
     
-    //Gets us our location
     func sendFootstep(placemark: CLPlacemark)
     {
         self.locationManager.stopUpdatingLocation()
         //println(placemark.location) //<+37.78585200,-122.40652900> +/- 100.00m (speed -1.00 mps / course -1.00) @ 9/12/15, 5:15:10 PM Eastern Daylight Time
         
         //turn location into a string
-        
         var locationString = String(stringInterpolationSegment: placemark.location)
         
         var longitudeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 1), end: advance(locationString.endIndex, -105))))
-        
         var latitudeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 14), end: advance(locationString.endIndex, -91))))
-        
         var dateString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 76), end: advance(locationString.endIndex, -21))))
-        
         var timeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 85), end: advance(locationString.endIndex, -21))))
         
         //println("long:\(longitudeString)\t lat:\(latitudeString)\t datetime:\(dateString)") //long:+37.7858520	 lat:-122.4065290	 datetime:9/12/15, 5:18:13 PM
@@ -81,9 +66,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         var dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "MM/dd/yy, hh:mm:ss a"
-        
         var date = dateFormatter.dateFromString(dateString)
-        
         //println(date!) //2015-09-12 21:20:03 +0000
         
         var timestamp = (date!.timeIntervalSince1970)
@@ -91,20 +74,13 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         //println(timestamp) //1442092803.0
         
         var ip = getWiFiAddress()!
-        
         //println(ip) //10.188.163.216
-        
-        
-        //send the stuff here POST
-        
         
         let request = NSMutableURLRequest(URL: NSURL(string: "http://52.21.51.134:3000/api/post")!)
         request.HTTPMethod = "POST"
         
-        //send the variables here i think
-        
-        println("ip:\(ip)\t time:\(timestamp)\t lat:\(latitudeString)\t long:\(longitudeString)")
         let postString = "ip=\(ip)&time=\(timestamp)&lat=\(latitudeString)&long=\(longitudeString)"
+        println("ip:\(ip)\t time:\(timestamp)\t lat:\(latitudeString)\t long:\(longitudeString)")
         
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
         let task = NSURLSession.sharedSession().dataTaskWithRequest(request)
@@ -146,6 +122,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 let lat = footstep["lat"].number!
                 let long = footstep["long"].number!
                 println("ip:\(ip)\t time:\(time)\t lat:\(lat)\t long:\(long)")
+                //dropPin(lat,long)
             }
         })
     }
@@ -189,19 +166,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         return address
     }
     
-
-    
 }
-
 
 
 class ViewControllerA: UIViewController {
     
-    
-    
     @IBOutlet weak var a: MKMapView!
-
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -213,10 +183,21 @@ class ViewControllerA: UIViewController {
         {
             let coordinateRegion = MKCoordinateRegionMakeWithDistance(Location.coordinate, regionRadius*2.0, regionRadius*2.0)
             a.setRegion(coordinateRegion, animated: true)
-        
         }
-        
         centerMapOnLocation(initialLocation)
+        
+        //test pin
+        let pinPlot = Pinplotting(coordinate: CLLocationCoordinate2D(latitude: 39.329143, longitude: -76.620534))
+        a.addAnnotation(pinPlot)
+        
+        func dropPin(lat: Int, long: Int){
+            //var coord = CLLocationCoordinate2DMake(CLLocationDegrees(Double(lat)), CLLocationDegrees(Double(long)))
+            //var pin = Pinplotting(coordinate: coord)
+            //a.addAnnotation(pin)
+            
+            a.addAnnotation(Pinplotting(coordinate: CLLocationCoordinate2DMake(CLLocationDegrees(lat), CLLocationDegrees(long))))
+        }
+
         
     }
 
