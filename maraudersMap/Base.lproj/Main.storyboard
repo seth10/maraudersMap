@@ -16,10 +16,12 @@
                         <rect key="frame" x="0.0" y="64" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5K7-ZX-5PB">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Mapkins Logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="8ao-iG-zwQ">
+                                <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5K7-ZX-5PB">
                                 <rect key="frame" x="16" y="553" width="150" height="94"/>
                                 <color key="backgroundColor" red="0.33769427910052907" green="0.0" blue="0.0032572052112492984" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="tintColor" red="0.64752810846560849" green="0.4678646392786161" blue="0.29034290107778427" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Homewood">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -28,10 +30,9 @@
                                     <segue destination="O3z-j7-Ljd" kind="show" id="gZX-Gp-lu9"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y2f-qn-ZvC">
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y2f-qn-ZvC">
                                 <rect key="frame" x="209" y="553" width="150" height="94"/>
                                 <color key="backgroundColor" red="0.78263475529100535" green="0.6718383373862572" blue="0.46780517742106342" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <color key="tintColor" red="0.33769427909999999" green="0.0" blue="0.003257205211" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Inner Harbour">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -40,9 +41,6 @@
                                     <segue destination="LB5-aU-kIu" kind="show" id="6Kd-FP-r4r"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Mapkins Logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="8ao-iG-zwQ">
-                                <rect key="frame" x="0.0" y="44" width="375" height="603"/>
-                            </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
