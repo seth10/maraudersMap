@@ -50,38 +50,19 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             if placemarks.count > 0
             {
                 let pm = placemarks[0] as! CLPlacemark
-                self.displayLocationInfo(pm)
+                self.sendFootstep(pm)
             }
             
         })
         
     }
+    
+    
     //Gets us our location
-    
-    
-    func getFootsteps()
-    {
-        println("start getFootsteps")
-        DataManager.getFootsteps { (footsteps) -> Void in
-            let json = JSON(data: footsteps)
-            let footsteps = json.array!
-            //println(footsteps)
-            for footstep in footsteps {
-                let ip = footstep["ip"].number!
-                let lat = footstep["lat"].number!
-                let long = footstep["long"].number!
-                let time = footstep["time"].number!
-                println("ip=\(ip)&time=\(time)&lat=\(lat)&long=\(long)")
-            }
-        }
-        println("end getFootsteps")
-    }
-    
-    
-    func displayLocationInfo(placemark: CLPlacemark)
+    func sendFootstep(placemark: CLPlacemark)
     {
         self.locationManager.stopUpdatingLocation()
-        println(placemark.location)
+        //println(placemark.location) //<+37.78585200,-122.40652900> +/- 100.00m (speed -1.00 mps / course -1.00) @ 9/12/15, 5:15:10 PM Eastern Daylight Time
         
         //turn location into a string
         
@@ -91,14 +72,11 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         var latitudeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 14), end: advance(locationString.endIndex, -91))))
         
-        var timeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 85), end: advance(locationString.endIndex, -21))))
-        
         var dateString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 76), end: advance(locationString.endIndex, -21))))
         
-        println(longitudeString)
-        println(latitudeString)
-        println(timeString)
-        println(dateString)
+        var timeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 85), end: advance(locationString.endIndex, -21))))
+        
+        //println("long:\(longitudeString)\t lat:\(latitudeString)\t datetime:\(dateString)") //long:+37.7858520	 lat:-122.4065290	 datetime:9/12/15, 5:18:13 PM
         //dateString contains date and time
         
         var dateFormatter = NSDateFormatter()
@@ -106,24 +84,15 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         var date = dateFormatter.dateFromString(dateString)
         
-        println(date)
+        //println(date!) //2015-09-12 21:20:03 +0000
         
         var timestamp = (date!.timeIntervalSince1970)
         //Gets us EPOCH time
-        println(timestamp)
+        //println(timestamp) //1442092803.0
         
         var ip = getWiFiAddress()!
         
-        println(ip)
-        
-        /*
-        
-        these are the final three variables we care about:
-        
-        println(longitudeString)
-        println(latitudeString)
-        println(timeString)
-        */
+        //println(ip) //10.188.163.216
         
         
         //send the stuff here POST
@@ -134,6 +103,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         //send the variables here i think
         
+        println("ip:\(ip)\t time:\(timestamp)\t lat:\(latitudeString)\t long:\(longitudeString)")
         let postString = "ip=\(ip)&time=\(timestamp)&lat=\(latitudeString)&long=\(longitudeString)"
         
         request.HTTPBody = postString.dataUsingEncoding(NSUTF8StringEncoding)
@@ -147,14 +117,37 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 return
             }
             
-            println("response = \(response)")
-            
+            //println("response = \(response)")
+            /*  response = <NSHTTPURLResponse: 0x7fb254805a10> { URL: http://52.21.51.134:3000/api/post } { status code: 200, headers {
+                Connection = "keep-alive";
+                Date = "Sat, 12 Sep 2015 21:29:10 GMT";
+                "Transfer-Encoding" = Identity;
+                Vary = "Accept-Encoding";
+                } }                                         */
+
             let responseString = NSString(data: data, encoding: NSUTF8StringEncoding)
-            println("responseString = \(responseString)")
+            println(responseString!) //Data recorded! 10.188.163.216 (180134872) at -122.4065290, 37.7858520 on Sat Sep 12 2015 21:36:25 GMT+0000 (UTC)
+            //.substringToIndex(count(responseString!)-1)   .substringToIndex(name.endIndex.predecessor())
             
-            self.getFootsteps()
+            self.getFootsteps(min: 1)
         }
         task.resume()
+    }
+    
+    func getFootsteps(min: Int = 5)
+    {
+        DataManager.getData(min, success: { (footsteps) -> Void in
+            let json = JSON(data: footsteps)
+            let footsteps = json.array!
+            //println(footsteps)
+            for footstep in footsteps {
+                let ip = footstep["ip"].number!
+                let time = footstep["time"].number!
+                let lat = footstep["lat"].number!
+                let long = footstep["long"].number!
+                println("ip:\(ip)\t time:\(time)\t lat:\(lat)\t long:\(long)")
+            }
+        })
     }
     
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
@@ -195,23 +188,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         
         return address
     }
-    
-    //POSTED
-    
-    
-    
-    /*
-    
-    these are the final three variables we care about:
-    
-    println(longitudeString)
-    println(latitudeString)
-    println(timeString)
-    */
-    
-    
-    //Gets map image
-    //http://52.21.51.134:3000/api/get?min=10000
     
 
     

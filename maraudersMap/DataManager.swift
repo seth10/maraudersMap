@@ -13,21 +13,6 @@ let AppURL = "http://52.21.51.134:3000/api/get"
 
 class DataManager {
     
-    class func getTopAppsDataFromFileWithSuccess(success: ((data: NSData) -> Void)) {
-        //1
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), {
-            //2
-            let filePath = NSBundle.mainBundle().pathForResource("TopApps",ofType:"json")
-            
-            var readError:NSError?
-            if let data = NSData(contentsOfFile:filePath!,
-                options: NSDataReadingOptions.DataReadingUncached,
-                error:&readError) {
-                    success(data: data)
-            }
-        })
-    }
-    
     class func loadDataFromURL(url: NSURL, completion:(data: NSData?, error: NSError?) -> Void) {
         var session = NSURLSession.sharedSession()
         
@@ -48,8 +33,8 @@ class DataManager {
         loadDataTask.resume()
     }
     
-    class func getFootsteps(success: ((footsteps: NSData!) -> Void)) {
-        loadDataFromURL(NSURL(string: AppURL)!, completion:{(data, error) -> Void in
+    class func getData(min: Int, success: ((footsteps: NSData!) -> Void)) {
+        loadDataFromURL(NSURL(string: AppURL+"?min="+String(min))!, completion:{(data, error) -> Void in
             if let urlData = data {
                 success(footsteps: urlData)
             }
