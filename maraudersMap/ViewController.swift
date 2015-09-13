@@ -97,12 +97,12 @@ class ViewControllerA: UIViewController, CLLocationManagerDelegate {
         //turn location into a string
         var locationString = String(stringInterpolationSegment: placemark.location)
         
-        var longitudeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 1), end: advance(locationString.endIndex, -105))))
-        var latitudeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 14), end: advance(locationString.endIndex, -91))))
-        var dateString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 76), end: advance(locationString.endIndex, -21))))
+        var latitudeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 1), end: advance(locationString.endIndex, -105))))
+        var longitudeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 14), end: advance(locationString.endIndex, -91))))
+        var dateString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 74), end: advance(locationString.endIndex, -21))))
         var timeString = String(locationString.substringWithRange(Range<String.Index>(start: advance(locationString.startIndex, 85), end: advance(locationString.endIndex, -21))))
         
-        //println("long:\(longitudeString)\t lat:\(latitudeString)\t datetime:\(dateString)") //long:+37.7858520	 lat:-122.4065290	 datetime:9/12/15, 5:18:13 PM
+        //println("lat:\(latitudeString)\t long:\(longitudeString)\t datetime:\(dateString)") //long:+37.7858520	 lat:-122.4065290	 datetime:9/12/15, 5:18:13 PM
         //dateString contains date and time
         
         var dateFormatter = NSDateFormatter()
