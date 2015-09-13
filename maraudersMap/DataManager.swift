@@ -9,8 +9,6 @@
 
 import Foundation
 
-let AppURL = "http://52.21.51.134:3000/api/get"
-
 class DataManager {
     
     class func loadDataFromURL(url: NSURL, completion:(data: NSData?, error: NSError?) -> Void) {
@@ -34,7 +32,7 @@ class DataManager {
     }
     
     class func getData(min: Int, success: ((footsteps: NSData!) -> Void)) {
-        loadDataFromURL(NSURL(string: AppURL+"?min="+String(min))!, completion:{(data, error) -> Void in
+        loadDataFromURL(NSURL(string: URL+":3000/api/get?min="+String(min))!, completion:{(data, error) -> Void in
             if let urlData = data {
                 success(footsteps: urlData)
             }

@@ -11,7 +11,24 @@ import CoreLocation
 import Foundation
 import MapKit
 
-class ViewController: UIViewController, CLLocationManagerDelegate {
+class ViewController: UIViewController {
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+}
+    
+
+class ViewControllerA: UIViewController, CLLocationManagerDelegate {
+    
+    @IBOutlet weak var a: MKMapView!
     
     let locationManager = CLLocationManager()
     
@@ -23,13 +40,34 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         self.locationManager.requestWhenInUseAuthorization()
         self.locationManager.startUpdatingLocation()
         
+        let initialLocation = CLLocation(latitude: 39.329143, longitude: -76.620534)
+        let regionRadius: CLLocationDistance = 700
+        func centerMapOnLocation(Location: CLLocation)
+        {
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance(Location.coordinate, regionRadius*2.0, regionRadius*2.0)
+            a.setRegion(coordinateRegion, animated: true)
+        }
+        centerMapOnLocation(initialLocation)
+        
+        //test pin
+        let pinPlot = Pinplotting(coordinate: CLLocationCoordinate2D(latitude: 39.329143, longitude: -76.620534))
+        a.addAnnotation(pinPlot)
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    
+    
+    func dropPin(lat: Double, long: Double) {
+        //var coord = CLLocationCoordinate2DMake(CLLocationDegrees(Double(lat)), CLLocationDegrees(Double(long)))
+        //var pin = Pinplotting(coordinate: coord)
+        //a.addAnnotation(pin)
+        
+        a.addAnnotation(Pinplotting(coordinate: CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(long))))
+        //println("point @ \(lat),\(long)")
+    }
     
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         CLGeocoder().reverseGeocodeLocation(manager.location, completionHandler: { (placemarks, error) -> Void in
@@ -47,9 +85,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         })
     }
     
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+        println("Error" + error.localizedDescription)
+    }
     
-    func sendFootstep(placemark: CLPlacemark)
-    {
+    
+    func sendFootstep(placemark: CLPlacemark) {
         self.locationManager.stopUpdatingLocation()
         //println(placemark.location) //<+37.78585200,-122.40652900> +/- 100.00m (speed -1.00 mps / course -1.00) @ 9/12/15, 5:15:10 PM Eastern Daylight Time
         
@@ -76,7 +117,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         var ip = getWiFiAddress()!
         //println(ip) //10.188.163.216
         
-        let request = NSMutableURLRequest(URL: NSURL(string: "http://52.21.51.134:3000/api/post")!)
+        let request = NSMutableURLRequest(URL: NSURL(string: URL+":3000/api/post")!)
         request.HTTPMethod = "POST"
         
         let postString = "ip=\(ip)&time=\(timestamp)&lat=\(latitudeString)&long=\(longitudeString)"
@@ -89,7 +130,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             
             if error != nil
             {
-                println("error=\(error)")
+                println(error!)
                 return
             }
             
@@ -105,13 +146,12 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
             println(responseString!) //Data recorded! 10.188.163.216 (180134872) at -122.4065290, 37.7858520 on Sat Sep 12 2015 21:36:25 GMT+0000 (UTC)
             //.substringToIndex(count(responseString!)-1)   .substringToIndex(name.endIndex.predecessor())
             
-            self.getFootsteps(min: 1)
+            self.getFootsteps(min: MIN)
         }
         task.resume()
     }
     
-    func getFootsteps(min: Int = 5)
-    {
+    func getFootsteps(min: Int = 5) {
         DataManager.getData(min, success: { (footsteps) -> Void in
             let json = JSON(data: footsteps)
             let footsteps = json.array!
@@ -122,13 +162,9 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 let lat = footstep["lat"].number!
                 let long = footstep["long"].number!
                 println("ip:\(ip)\t time:\(time)\t lat:\(lat)\t long:\(long)")
-                //dropPin(lat,long)
+                self.dropPin(Double(lat), long: Double(long))
             }
         })
-    }
-    
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
-        println("Error" + error.localizedDescription)
     }
     
     //http://stackoverflow.com/questions/30748480/swift-get-devices-ip-address
@@ -164,56 +200,6 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
         }
         
         return address
-    }
-    
-}
-
-
-class ViewControllerA: UIViewController {
-    
-    @IBOutlet weak var a: MKMapView!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        let initialLocation = CLLocation(latitude: 39.329143, longitude: -76.620534)
-        let regionRadius: CLLocationDistance = 700
-        func centerMapOnLocation(Location: CLLocation)
-        {
-            let coordinateRegion = MKCoordinateRegionMakeWithDistance(Location.coordinate, regionRadius*2.0, regionRadius*2.0)
-            a.setRegion(coordinateRegion, animated: true)
-        }
-        centerMapOnLocation(initialLocation)
-        
-        //test pin
-        let pinPlot = Pinplotting(coordinate: CLLocationCoordinate2D(latitude: 39.329143, longitude: -76.620534))
-        a.addAnnotation(pinPlot)
-        
-        func dropPin(lat: Int, long: Int){
-            //var coord = CLLocationCoordinate2DMake(CLLocationDegrees(Double(lat)), CLLocationDegrees(Double(long)))
-            //var pin = Pinplotting(coordinate: coord)
-            //a.addAnnotation(pin)
-            
-            a.addAnnotation(Pinplotting(coordinate: CLLocationCoordinate2DMake(CLLocationDegrees(lat), CLLocationDegrees(long))))
-        }
-
-        
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
 }
